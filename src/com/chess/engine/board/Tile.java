@@ -1,6 +1,10 @@
+package com.chess.engine.board;
+import com.chess.engine.pieces.Piece;
+
 /**
  * Class to represent a particular tile in the chess board
  * This might be empty tile or occupied tile
+ * We cannot instantiate this class as it is abstract.
  */
 public abstract class Tile {
     int tileCoordinate;
@@ -22,6 +26,7 @@ public abstract class Tile {
 
     /**
      * Represent an empty tile
+     * Static because this class is on their own and not under Tile
      */
     public static final class EmptyTile extends Tile{
         EmptyTile (int coordinate){
