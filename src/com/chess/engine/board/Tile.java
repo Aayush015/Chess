@@ -1,15 +1,36 @@
 package com.chess.engine.board;
 import com.chess.engine.pieces.Piece;
+import com.google.common.collect.ImmutableMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class to represent a particular tile in the chess board
  * This might be empty tile or occupied tile
  * We cannot instantiate this class as it is abstract.
+ * Making this class immutable to save need for thread synchronization and efficiency of code.
  */
 public abstract class Tile {
-    int tileCoordinate;
+    protected final int tileCoordinate;
+    private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
-    Tile (int tileCoordinate){
+    /**
+     * Map to create all possible tiles. This method is made immutable using Google's Guava dependency.
+     * @return
+     */
+    private static Map<Integer,EmptyTile> createAllPossibleEmptyTiles() {
+        final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
+        for (int i=0; i<64; i++){
+            emptyTileMap.put(i, new EmptyTile(i));
+        }
+        return ImmutableMap.copyOf(emptyTileMap);
+    }
+
+    public static Tile createTile(final int tileCoordinate, final Piece piece){
+        return piece != null ? new OccupiedTile(tileCoordinate, piece) : EMPTY_TILES_CACHE.get(tileCoordinate);
+    }
+    private Tile (int tileCoordinate){
         this.tileCoordinate = tileCoordinate;
     }
 
@@ -29,7 +50,7 @@ public abstract class Tile {
      * Static because this class is on their own and not under Tile
      */
     public static final class EmptyTile extends Tile{
-        EmptyTile (int coordinate){
+        private EmptyTile (final int coordinate){
             super(coordinate);
         }
         @Override
@@ -46,8 +67,8 @@ public abstract class Tile {
      * Represent the occupied tiles
      */
     public static final class OccupiedTile extends Tile{
-        Piece pieceOnTile;
-        OccupiedTile(int coordinate, Piece piece){
+        private final Piece pieceOnTile;
+        private OccupiedTile(int coordinate, Piece piece){
             super(coordinate);
             this.pieceOnTile = piece;
         }
