@@ -19,9 +19,13 @@ public abstract class Piece {
         this.piecePosition = piecePosition;
     }
 
+    public Type getPieceType() {
+        return this.pieceType;
+    }
+
     /*
-    Calculate a list of legal moves for a particular piece
-     */
+        Calculate a list of legal moves for a particular piece
+         */
     public abstract List<Move> calculateLegalMoves (final Board board);
 
 
