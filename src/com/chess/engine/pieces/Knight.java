@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import static com.chess.engine.board.BoardUtils.isValidTileCoordinate;
+import static com.chess.engine.board.Move.*;
 
 /**
  * Knight Piece, and how its legal moves work
@@ -26,7 +27,7 @@ public class Knight extends Piece{
     }
 
     @Override
-    public Collection<Move> calculateLegalMoves(Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
         for (final int currCandidate: CANDIDATE_MOVE_COORDINATES){
             int candidateDestinationCoordinate= this.piecePosition + currCandidate;
@@ -39,13 +40,14 @@ public class Knight extends Piece{
                 }
                 final Tile candidateDestinationOnTile = board.getTile(candidateDestinationCoordinate);
                 if (!candidateDestinationOnTile.isTileOccupied()) {
-                    legalMoves.add(new Move());
+                    legalMoves.add(new majorMove(board, this, candidateDestinationCoordinate));
                 } else {
                     final Piece pieceAtAnotherMove = candidateDestinationOnTile.getPiece();
                     final Type pieceType = pieceAtAnotherMove.getPieceType();
 
                     if (this.pieceType != pieceType) {
-                        legalMoves.add(new Move());
+                        legalMoves.add(new attackMove(board, this, candidateDestinationCoordinate,
+                                pieceAtAnotherMove));
                     }
                 }
             }
