@@ -13,14 +13,14 @@ import java.util.List;
 import static com.chess.engine.board.Move.*;
 
 public class Bishop extends Piece{
-    private final static int[] CAND_MOV_COORDINATES = {-9, -7, 7, 9};
+    private final static int[] CANDIDATE_MOVE_COORDINATES = {-9, -7, 7, 9};
     Bishop(int piecePosition, Type pieceType){
         super(piecePosition, pieceType);
     }
     @Override
     public Collection<Move> calculateLegalMoves(Board board) {
         final List<Move> legalMoves = new ArrayList<>();
-        for (final int candidateCoordinateOffset: CAND_MOV_COORDINATES){
+        for (final int candidateCoordinateOffset: CANDIDATE_MOVE_COORDINATES){
             int candidateDestinationCoordinate = this.piecePosition;
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)){
                 if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset) ||
