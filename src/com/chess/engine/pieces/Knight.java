@@ -22,7 +22,7 @@ public class Knight extends Piece{
     including the ones that may be occupied or out of bounds.
      */
     private final static int[] CANDIDATE_MOVE_COORDINATES = {-17, -15, -10, -6, 6, 10, 15, 17};
-    Knight(int piecePosition, Type pieceType) {
+    public Knight(final Type pieceType, final int piecePosition) {
         super(piecePosition, pieceType);
     }
 

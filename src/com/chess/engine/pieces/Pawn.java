@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Pawn extends Piece{
     private final static int[] CANDIDATE_MOVE_COORDINATE = {7, 8, 9, 16};
-    Pawn(final int piecePosition,final Type pieceType) {
+    public Pawn(final Type pieceType, final int piecePosition) {
         super(piecePosition, pieceType);
     }
 

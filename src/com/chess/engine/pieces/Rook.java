@@ -16,7 +16,7 @@ import static com.chess.engine.board.BoardUtils.isValidTileCoordinate;
 public class Rook extends Piece{
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = {-8, -1, 1, 8};
-    Rook (int piecePosition, Type pieceType){
+    public Rook (final Type pieceType, final int piecePosition){
         super(piecePosition, pieceType);
     }
     @Override
