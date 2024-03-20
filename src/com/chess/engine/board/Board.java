@@ -4,17 +4,37 @@ import com.chess.engine.Type;
 import com.chess.engine.pieces.*;
 import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public class Board {
 
     private final List<Tile> gameBoard;
+    private final Collection<Piece> whitePieces;
+    private final Collection<Piece> blackPieces;
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
+        this.whitePieces = calculateActivePieces(this.gameBoard, Type.WHITE);
+        this.blackPieces = calculateActivePieces(this.gameBoard, Type.BLACK);
+    }
+
+    private Collection<Piece> calculateActivePieces(final List<Tile> gameBoard,
+                                                    final Type type){
+        final List<Piece> activePieces = new ArrayList<>();
+        for (final Tile tile: gameBoard){
+            if (tile.isTileOccupied()){
+                final Piece piece = tile.getPiece();
+                if(piece.getPieceType() == type) {
+                    activePieces.add(piece);
+                }
+            }
+        }
+        return ImmutableList.copyOf(activePieces);
     }
     public Tile getTile(final int tileCoordinate){
-        return null;
+        return gameBoard.get(tileCoordinate);
     }
 
     private static List<Tile> createGameBoard(final Builder builder){
@@ -46,7 +66,6 @@ public class Board {
         builder.setPiece(new Pawn(Type.BLACK, 15));
 
         // White layout
-
         builder.setPiece(new Rook(Type.WHITE, 48));
         builder.setPiece(new Knight(Type.WHITE, 49));
         builder.setPiece(new Bishop(Type.WHITE, 50));
@@ -63,7 +82,6 @@ public class Board {
         builder.setPiece(new Pawn(Type.WHITE, 61));
         builder.setPiece(new Pawn(Type.WHITE, 62));
         builder.setPiece(new Pawn(Type.WHITE, 63));
-
 
         return builder.build();
     }
