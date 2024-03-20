@@ -13,14 +13,19 @@ import java.util.Collection;
 public abstract class Piece {
     protected final int piecePosition;
     protected final Type pieceType;
+    protected final boolean isFirstMove;
 
     Piece(final int piecePosition, final Type pieceType){
         this.pieceType = pieceType;
         this.piecePosition = piecePosition;
+        this.isFirstMove = false;
     }
 
     public Type getPieceType() {
         return this.pieceType;
+    }
+    public boolean isFirstMove() {
+        return this.isFirstMove;
     }
 
     /*
