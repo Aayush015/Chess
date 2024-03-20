@@ -1,16 +1,16 @@
 package com.chess.engine.pieces;
-
 import com.chess.engine.Type;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
+import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class Pawn extends Piece{
-    private final static int[] CANDIDATE_MOVE_COORDINATE = {9};
+    private final static int[] CANDIDATE_MOVE_COORDINATE = {7, 8, 9, 16};
     Pawn(final int piecePosition,final Type pieceType) {
         super(piecePosition, pieceType);
     }
@@ -24,6 +24,7 @@ public class Pawn extends Piece{
                 continue;
             }
 
+            // handles the non attacking pawn move
             if (currCandidateOffset == 8 && !board.getTile(candidateDestinationCoordinate).isTileOccupied()){
                 legalMoves.add(new Move.majorMove(board, this, candidateDestinationCoordinate));
             } else if (currCandidateOffset == 16 && this.isFirstMove() &&
@@ -34,10 +35,26 @@ public class Pawn extends Piece{
                     !board.getTile(candidateDestinationCoordinate).isTileOccupied()){
                     legalMoves.add(new Move.majorMove(board, this, candidateDestinationCoordinate));
                 }
+            } else if(currCandidateOffset == 7 &&
+                    !((BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceType.isWhite()) ||
+                    (BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceType.isBlack()))) {
+                if (board.getTile(candidateDestinationCoordinate).isTileOccupied()){
+                    final Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
+                    if (this.pieceType != pieceOnCandidate.getPieceType()) {
+                        legalMoves.add(new Move.majorMove(board, this, candidateDestinationCoordinate));
+                    }
+                }
+            } else if (currCandidateOffset == 9 &&
+                    !((BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceType.isWhite()) ||
+                    (BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceType.isBlack()))){
+                if (board.getTile(candidateDestinationCoordinate).isTileOccupied()){
+                    final Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
+                    if (this.pieceType != pieceOnCandidate.getPieceType()) {
+                        legalMoves.add(new Move.majorMove(board, this, candidateDestinationCoordinate));
+                    }
+                }
             }
-
-
         }
-        return legalMoves;
+        return ImmutableList.copyOf(legalMoves);
     }
 }
